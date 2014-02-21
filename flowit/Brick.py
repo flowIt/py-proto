@@ -17,7 +17,7 @@ class Brick:
 			raise Exception("%d Output already connected (Brick %d)" % (inNumber, self._id))
 		if not isinstance(buffer, Buffer):
 			raise Exception("Cannot connect a non Buffer object (Brick %d)" % (self._id))
-		tmpId = buffer.setOut()
+		tmpId = buffer.setOut(self._id)
 		self._ins[inNumber] = [tmpId, buffer]
 		
 	

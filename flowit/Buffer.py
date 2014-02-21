@@ -7,10 +7,10 @@ class Buffer:
 		self._inId = -1
 		self._outCtxIds = []
 	
-	def __getConnectionId(self):
+	def __getConnectionId(self, cur_id):
 		tmp = self.__connectionId
 		self.__connectionId += 1
-		return tmp
+		return "%d_%d_%d" % (self._id, cur_id, tmp)
 	
 	def PushData(self, cur_id):
 		if cur_id is not self._inId:
@@ -33,7 +33,7 @@ class Buffer:
 			raise Exception("Cant connect %d as Input of Buffer, already connected (Buffer %d)" % (cur_id, self._id))
 		self._inId = cur_id
 
-	def setOut(self):
-		ret = self.__getConnectionId()
+	def setOut(self, cur_id):
+		ret = self.__getConnectionId(cur_id)
 		self._outCtxIds.append(ret)
 		return ret
