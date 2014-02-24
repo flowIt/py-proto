@@ -36,5 +36,16 @@ class BrickExecutionTest(unittest.TestCase):
     def testDoCycle(self):
         self.assertRaises(Exception, self.brick.DoCycle)
 
+class BufferConnectionTest(unittest.TestCase):
+	def setUp(self):
+		self.brick1 = Brick(0, 1)
+		self.brick2 = Brick(0, 1)
+		self.brick3 = Brick(1, 0)
+		self.brick4 = Brick(1, 0)
+		self.buf = Buffer()
+	def testConnectToAlreadyConnectedBufferEntry(self):
+		self.brick1.SetOut(0, self.buf)
+		self.assertRaises(Exception, self.brick2.SetOut, 0, self.buf)
+
 if __name__ == '__main__':
     unittest.main()
