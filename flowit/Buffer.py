@@ -19,7 +19,7 @@ class Buffer:
 	def PushData(self, cur_id, data):
 		if cur_id is not self._inId:
 			raise Exception("Wrong Id(%d) in Buffer PushData (Buffer %d)" % (cur_id, self._id))
-		self._datas.append(data)
+		self._datas.append([data, len(self._outCtxIds)])
 		
 	def PopData(self, cur_id):
 		if cur_id not in self._outCtxIds:
@@ -27,15 +27,16 @@ class Buffer:
 		if self._outCtxIds[cur_id] >= len(self._datas):
 			return None
 		tmp = self._datas[self._outCtxIds[cur_id]]
+		tmp[1] -= 1
 		self._outCtxIds[cur_id] += 1
-		return tmp
+		return tmp[0]
 
 	def PeekData(self, cur_id):
 		if cur_id not in self._outCtxIds:
 			raise Exception("This ConnectionId (%d) isnt connected to that Buffer (Buffer %d)" % (cur_id, self._id))
 		if self._outCtxIds[cur_id] >= len(self._datas):
 			return None
-		return self._datas[self._outCtxIds[cur_id]]
+		return self._datas[self._outCtxIds[cur_id]][0]
 
 	def needData(self, cur_id):
 		if cur_id not in self._outCtxIds:
@@ -61,3 +62,16 @@ class Buffer:
 		self._outCtxIds[ret] = 0
 		return ret
 		
+	def clean(self):
+		i = 0
+		while len(self._datas):
+			if self._datas[0][1] == 0:
+				i += 1
+				del self._datas[0]
+			else:
+				break
+		if i > 0:
+			for val in self._outCtxIds:
+				self._outCtxIds[val] -= i
+				if self._outCtxIds[val] < 0:
+					raise Exception("A Connection(%d) value in a buffer is negative! (Buffer %d)" % (val, self._id))
