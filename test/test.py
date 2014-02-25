@@ -69,9 +69,11 @@ class OrdonnancerUnitTest(unittest.TestCase):
 		self.ordo = Ordonnancer()
 		self.brick1 = testBrickOut(0, 1)
 		self.brick2 = testBrickIn(1, 0)
+		self.brick3 =  testBrickIn(1, 0)
 		self.buf = Buffer()
 		self.brick1.SetOut(0, self.buf)
 		self.brick2.SetIn(0, self.buf)
+		self.brick3.SetIn(0, self.buf)
 	
 	def tearDown(self):
 		Ordonnancer.Remove()
@@ -82,6 +84,7 @@ class OrdonnancerUnitTest(unittest.TestCase):
 		self.assertRaises(Exception, self.ordo.AddBrick, self.brick1)
 	
 	def testDoCycle(self):
+		self.ordo.AddBrick(self.brick3)
 		self.ordo.AddBrick(self.brick2)
 		self.ordo.AddBrick(self.brick1)
 		self.ordo.Run(10)
