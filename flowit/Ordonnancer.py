@@ -70,13 +70,13 @@ class Ordonnancer:
 			cyclenum += 1
 	
 	def PushNeedData(self, brick):
-		print "======ORDONNANCER NEEDDATA========="
-		print brick.GetId()
+		print "======ORDONNANCER NEEDDATA For %d=========" % brick.GetId()
 		try:
 			i = self._needData.index(brick)
 			del self._needData[i]
 			print "UPPING IN NEEDDATA"
 			self._needData.insert(0, brick)
+			print "======ORDONNANCER NEEDDATA False========="
 			return False
 		except:
 			pass
@@ -85,7 +85,9 @@ class Ordonnancer:
 			del self._tmp[i]
 			print "INSERTING IN NEEDDATA %d" % brick.GetId()
 			self._needData.insert(0, brick)
+			print "======ORDONNANCER NEEDDATA False========="
 			return False
 		except:
 			pass
+		print "======ORDONNANCER NEEDDATA True========="	
 		return True
