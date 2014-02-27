@@ -24,10 +24,11 @@ class testBrickIn(Brick):
 		for i in range(self.GetNbIn()):
 			if i in self._ins:
 				if self._ins[i][1].IsEmpty(self._ins[i][0]):
+					print "Brick In %d NEED DATA===========" % (self._id)
 					if self._ins[i][1].NeedData(self._ins[i][0]) is False:
 						ret = False
 		if ret is True:
-			print "Brick %d===================="  % (self._id)
+			print "Brick In %d===================="  % (self._id)
 			for i in range(self.GetNbIn()):
 				if i in self._ins:
 					if self._ins[i][1].IsEmpty(self._ins[i][0]) is False:
@@ -37,11 +38,40 @@ class testBrickIn(Brick):
 			print "============================"
 		return ret
 		
+		
+class testBrickInNOut(Brick):
+	def DoCycle(self):
+		ret = True
+		for i in range(self.GetNbIn()):
+			if i in self._ins:
+				if self._ins[i][1].IsEmpty(self._ins[i][0]):
+					print "Brick InNOut %d NEED DATA===========" % (self._id)
+					if self._ins[i][1].NeedData(self._ins[i][0]) is False:
+						ret = False
+		if ret is True:
+			print "Brick InNOut %d====================" % (self._id)
+			datas = []
+			for i in range(self.GetNbIn()):
+				if i in self._ins:
+					if self._ins[i][1].IsEmpty(self._ins[i][0]) is False:
+						tmp = self._ins[i][1].PopData(self._ins[i][0])
+						print "Buffer %d:" % i
+						print tmp
+						datas.append(tmp)
+			for i in range(self.GetNbOut()):
+				if i in self._outs:
+					if self._outs[i].IsFull(self) is False:
+						tmp = datas[i % len(datas)]
+						print "Push %d in %d" % (tmp, i)
+						self._outs[i].PushData(self, tmp)
+			print "============================"
+		return ret
+		
 class testBrickOut(Brick):
 	tmp = 0
 	def DoCycle(self):
 		ret = True
-		print "Brick %d====================" % (self._id)
+		print "Brick Out %d====================" % (self._id)
 		for i in range(self.GetNbOut()):
 			if i in self._outs:
 				if self._outs[i].IsFull(self) is False:

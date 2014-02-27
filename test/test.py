@@ -70,22 +70,41 @@ class OrdonnancerUnitTest(unittest.TestCase):
 		self.brick1 = testBrickOut(0, 1)
 		self.brick2 = testBrickIn(1, 0)
 		self.brick3 =  testBrickIn(1, 0)
-		self.buf = Buffer()
-		self.brick1.SetOut(0, self.buf)
-		self.brick2.SetIn(0, self.buf)
-		self.brick3.SetIn(0, self.buf)
+		self.brick4 = testBrickInNOut(1,1)
+		self.buf1 = Buffer()
+		self.buf2 = Buffer()
+		
 	
 	def tearDown(self):
 		Ordonnancer.Remove()
 	
 	def testAddBrick(self):
+		self.brick1.SetOut(0, self.buf1)
+		self.brick2.SetIn(0, self.buf1)
+		self.brick3.SetIn(0, self.buf1)
 		self.assertRaises(Exception, self.ordo.AddBrick, 0)
 		self.ordo.AddBrick(self.brick1)
 		self.assertRaises(Exception, self.ordo.AddBrick, self.brick1)
 	
+#	def testDoCycleSimple(self):
+#		self.brick1.SetOut(0, self.buf1)
+#		self.brick2.SetIn(0, self.buf1)
+#		self.brick3.SetIn(0, self.buf1)
+#		self.ordo.AddBrick(self.brick3)
+#		self.ordo.AddBrick(self.brick2)
+#		self.ordo.AddBrick(self.brick1)
+#		self.ordo.Run(10)
+	
 	def testDoCycle(self):
+		self.brick1.SetOut(0, self.buf1)
+		self.brick4.SetIn(0, self.buf1)
+		self.brick4.SetOut(0, self.buf2)
+		self.brick2.SetIn(0, self.buf2)
+		self.brick3.SetIn(0, self.buf2)
+	
 		self.ordo.AddBrick(self.brick3)
 		self.ordo.AddBrick(self.brick2)
+		self.ordo.AddBrick(self.brick4)
 		self.ordo.AddBrick(self.brick1)
 		self.ordo.Run(10)
 

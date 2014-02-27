@@ -43,11 +43,12 @@ class Ordonnancer:
 			while True:
 				if len(self._needData):
 					while len(self._needData):
-						if self._needData[0].DoCycle() is True:
-							self._done.append(self._needData[0])
-						else:
-							self._todo.insert(0, self._needData[0])
+						tmp = self._needData[0]
 						del self._needData[0]
+						if tmp.DoCycle() is True:
+							self._done.append(tmp)
+						else:
+							self._todo.insert(0, tmp)
 				elif len(self._todo):
 					while len(self._todo):
 						if self._todo[0].DoCycle() is True:
@@ -57,12 +58,12 @@ class Ordonnancer:
 							break
 				elif len(self._tmp):
 					while len(self._tmp):
-						if self._tmp[0].DoCycle() is True:
-							self._done.append(self._tmp[0])
-							del self._tmp[0]
+						tmp = self._tmp[0]
+						del self._tmp[0]
+						if tmp.DoCycle() is True:
+							self._done.append(tmp)
 						else:
-							self._todo.insert(0, self._tmp[0])
-							del self._tmp[0]
+							self._todo.insert(0, tmp)
 							break
 				else:
 					break
@@ -70,7 +71,7 @@ class Ordonnancer:
 	
 	def PushNeedData(self, brick):
 		print "======ORDONNANCER NEEDDATA========="
-		print brick
+		print brick.GetId()
 		try:
 			i = self._needData.index(brick)
 			del self._needData[i]
@@ -82,7 +83,7 @@ class Ordonnancer:
 		try:
 			i = self._tmp.index(brick)
 			del self._tmp[i]
-			print "INSERTING IN NEEDDATA"
+			print "INSERTING IN NEEDDATA %d" % brick.GetId()
 			self._needData.insert(0, brick)
 			return False
 		except:

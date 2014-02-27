@@ -10,7 +10,7 @@ class Brick:
 		self._ins = {}
 		self._outs = {}
 		
-	def GetId():
+	def GetId(self):
 		return self._id
 	
 	def SetIn(self, inNumber, buffer):
